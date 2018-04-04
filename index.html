@@ -17,18 +17,46 @@
 	<body>
 		<div class="jumbotron">
 			<center><h1>A Little About SQL Injections</h1>
-				<h4 style="margin-left:30px;">Jonathan Quang and Daniel Chernovolenko</h4></center>
+				<h4>Jonathan Quang and Daniel Chernovolenko</h4></center>
 		</div>
 
-		<div id="MainBodyStuff" style="margin-left:30px;">
+		<div id="MainBodyStuff"><center>
 			<h2>What is a SQL Injection (SQLi)?</h2>
-			<p>SQL injection refers to an attack where an attacker can execute malicious SQL statements (known as payloads).<br>
-			This is typically done by exploiting poorly designed construction of SQL statements in backend code.<br>
-			Hackers can add, modify, and delete data stored in the DB, as well as gain access to sensitive data.<br>
-			Perhaps one of the most recently famous examples of an SQL injection were the <a href="https://motherboard.vice.com/en_us/article/ne3bv7/equifax-breach-social-security-numbers-researcher-warning">vulnerable Equifax servers.</a><br>
+			<p>SQL injection refers to an attack where an attacker can execute malicious SQL statements (known as payloads).
+			This is typically done by exploiting poorly designed construction of SQL statements in backend code.
+			Hackers can add, modify, and delete data stored in the DB, as well as gain access to sensitive data.
+			Perhaps one of the most recently famous examples of an SQL injection were the <a href="https://motherboard.vice.com/en_us/article/ne3bv7/equifax-breach-social-security-numbers-researcher-warning">vulnerable Equifax servers.</a>
 			</p>
+			<h2>Review of How We Interact with SQL DBs in Class</h2>
+			<p>We typically interact with our SQL Databases using Python, Flask, and SQLite3. Database files contain tables with names for each column</p>
+			<img src="tableExample.png">
+			<br>
+			<h2>How do we Typically Interact with SQL DBs in Python?</h2>
+			<br>
+			<p>First, we inport the sqlite3 library. We then create a connection to the database, and from the connection, we set a variable to be the cursor of the connection. After, we execute an SQL statement, commit changes, and close the connection. See the following example:
+			</p>
+			<br>
+			<pre>
+				<code>Import sqlite3
+					conn=sqlite3.connect('example.db')
+					c=conn.cursor()
+					c.execute("CREATE TABLE students (name text, grade real)")
+					conn.commit()
+					conn.close()</code>
+			</pre>
+			<br>
+			<h2>How Does an Enduser Give Input and Recieve Output</h2>
+			<p>The user of a web application like the ones we have done in class gives information in the form of an &ltinput&gt HTML tag. As developers, we store the resulting POST or GET request data in a python variable. For this example, this variable will be <code>userName</code>. In the following codeexample, we print out relevant data to a single user name:
+			</p>
+			<br>
+			<pre>
+				<code>sqlStatement = "SELECT * FROM students WHERE name = " + userName
+				result = c.execute(sqlStatement)
+				for row in result:
+      					print row</code>
+			</pre>
 
-		</div>
+			</center></div>
 
 	</body>
 </html>
