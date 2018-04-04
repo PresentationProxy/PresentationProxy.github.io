@@ -1,5 +1,5 @@
 p {
-	width:1000px;
+	width:80%;
 	word-wrap:break-word;
 	font-size:16px;
 	text-align:left;
@@ -7,6 +7,7 @@ p {
 }
 
 pre {
+	width:80%;
 	font-size:14px;
 	text-align:left;
 	background-color: #eee;
