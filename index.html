@@ -56,6 +56,32 @@
       					print row</code>
 			</pre>
 
+
+			<br>
+			<h2>Security Flaw - SQL Injections</h2>
+			<p> Look at the part where we compose the sql statement: <code>sqlStatement = "SELECT * FROM students WHERE name = " + userName</code>. If a malicious user chooses not to put their username, but rather some logic stuff, such as "105 OR 1=1" into the &ltinput&gt HTML tag, the resulting string, <code>sqlStatement</code> is now equal to <code>"SELECT * FROM students WHERE name = 105 OR 1=1"</code> The executed code now looks like the following:
+			</p>
+			<br>
+			<pre>
+				<code>sqlStatement = "SELECT * FROM students WHERE name = 105 OR 1=1"
+				result = c.execute(sqlStatement)
+				for row in result:
+      				print row</code>
+			</pre>
+			<br>
+			<p>name=105 or 1=1 is a logical statement that is always true. This results in the entire table of students being printed out.
+			</p>
+			<br>
+			<h2>SQL Injections, but Even Worse</h2>
+			<p>Recall that ";" can be used to denote the end of an SQL statement. If a semicolon is used in the &ltinput&gt HTML element, then a hacker can put in any SQL statement they wish. Let's say that they put <code>105; DROP TABLE students</code>. The <code>sqlStatement</code> string is now <code>"SELECT * FROM students WHERE  name = 105; DROP TABLE students"</code>. This hacker has now just caused the loss of an entire table.
+			</p>
+			<br>
+			<p>
+			Hackers can also modify data using UPDATE-SET-WHERE. Lets say they type in <code>105;UPDATE students SET testScore1 = 100 WHERE name="Bob Ross"</code>. Now our hacker, Bob Ross, has given himself a free 100 for the class.
+			</p>
+
+
+
 			</center></div>
 
 	</body>
