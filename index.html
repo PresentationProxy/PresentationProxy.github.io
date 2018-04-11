@@ -5,9 +5,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		
+
 		<!-- custom js and css below -->
 
 	 	<link rel="stylesheet" href="index.css">
@@ -21,23 +21,26 @@
 		</div>
 
 		<div id="MainBodyStuff">
+			<img src="bobbytables.png">
+			<hr>
 			<h2>What is a SQL Injection (SQLi)?</h2>
 			<p>SQL injection refers to an attack where an attacker can execute malicious SQL statements (known as payloads).
 			This is typically done by exploiting poorly designed construction of SQL statements in backend code.
 			Hackers can add, modify, and delete data stored in the DB, as well as gain access to sensitive data.
 			Perhaps one of the most recently famous examples of an SQL injection were the <a href="https://motherboard.vice.com/en_us/article/ne3bv7/equifax-breach-social-security-numbers-researcher-warning">vulnerable Equifax servers.</a>
 			</p>
+			<hr>
 			<h2>Review of How We Interact with SQL DBs in Class</h2>
 			<p>We typically interact with our SQL Databases using Python, Flask, and SQLite3. Database files contain tables with names for each column</p>
 			<img src="tableExample.png">
-			<br>
+			<hr>
 			<h2>How do we Typically Interact with SQL DBs in Python?</h2>
 			<br>
 			<p>First, we inport the sqlite3 library. We then create a connection to the database, and from the connection, we set a variable to be the cursor of the connection. After, we execute an SQL statement, commit changes, and close the connection. See the following example:
 			</p>
 			<br>
 			<pre>
-				<code>	
+				<code>
 Import sqlite3
 conn=sqlite3.connect('example.db')
 c=conn.cursor()
@@ -104,7 +107,7 @@ http://www.example.com/product.php?id=10||UTL_INADDR.GET_HOST_NAME( (SELECT user
 www.estore.com/items/items.asp?itemid=1 UNION SELECT username, password FROM users</code>
 							</pre>
 				</p>
-				
+
 				<h3>Inferential SQL Injection (Blind SQLi)</h3>
 				<p>
 						When the attacker sends payloads and observes the web application’s response without actually transferring any data (no results will be physically shown.) More difficult but still just as dangerous. </p>
